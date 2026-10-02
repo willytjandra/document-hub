@@ -12,15 +12,15 @@ This is a foundation slice. Authentication, document uploads, database tables, R
 
 ## What I will learn
 
-| Topic | Practical outcome |
-| --- | --- |
-| Next.js App Router | Explain how `src/app/page.tsx` defines `/` and how `layout.tsx` wraps pages. |
-| Server and Client Components | Understand where code executes and when browser interaction requires a Client Component. |
-| pnpm | Install dependencies, run scripts, and commit a reproducible lockfile. |
-| TypeScript and Tailwind CSS | Read the scaffold and build a small typed, styled page. |
-| Supabase | Understand its PostgreSQL, Auth, and Storage capabilities and prepare a development project. |
-| Environment configuration | Keep local values out of Git and provide a placeholder configuration for other developers. |
-| Verification and Git | Check lint, types, and the production build; record a meaningful milestone. |
+| Topic                        | Practical outcome                                                                            |
+| ---------------------------- | -------------------------------------------------------------------------------------------- |
+| Next.js App Router           | Explain how `src/app/page.tsx` defines `/` and how `layout.tsx` wraps pages.                 |
+| Server and Client Components | Understand where code executes and when browser interaction requires a Client Component.     |
+| pnpm                         | Install dependencies, run scripts, and commit a reproducible lockfile.                       |
+| TypeScript and Tailwind CSS  | Read the scaffold and build a small typed, styled page.                                      |
+| Supabase                     | Understand its PostgreSQL, Auth, and Storage capabilities and prepare a development project. |
+| Environment configuration    | Keep local values out of Git and provide a placeholder configuration for other developers.   |
+| Verification and Git         | Check lint, types, and the production build; record a meaningful milestone.                  |
 
 ## Step 1 — Check the local tools
 
@@ -51,15 +51,15 @@ pnpm create next-app@latest . --use-pnpm
 
 Select custom settings if the CLI offers a recommended-defaults shortcut:
 
-| Setting | Choice | Reason |
-| --- | --- | --- |
-| TypeScript | Yes | Type checking across application code. |
-| Linter | ESLint | A consistent baseline for code quality. |
-| React Compiler | No | Start with fewer concepts; revisit when useful. |
-| Tailwind CSS | Yes | Build the initial UI with utility classes. |
-| `src/` directory | Yes | Keep application code separate from root configuration. |
-| App Router | Yes | Learn the current Next.js application model. |
-| Customize import alias | No | Keep the default `@/*` alias. |
+| Setting                | Choice | Reason                                                  |
+| ---------------------- | ------ | ------------------------------------------------------- |
+| TypeScript             | Yes    | Type checking across application code.                  |
+| Linter                 | ESLint | A consistent baseline for code quality.                 |
+| React Compiler         | No     | Start with fewer concepts; revisit when useful.         |
+| Tailwind CSS           | Yes    | Build the initial UI with utility classes.              |
+| `src/` directory       | Yes    | Keep application code separate from root configuration. |
+| App Router             | Yes    | Learn the current Next.js application model.            |
+| Customize import alias | No     | Keep the default `@/*` alias.                           |
 
 Prompts and generated files can change between releases. Inspect what was actually generated rather than assuming every file matches this guide. Commit `pnpm-lock.yaml`; use pnpm consistently.
 
@@ -73,18 +73,18 @@ Open http://localhost:3000, or the port printed by the terminal. Confirm the sta
 
 ## Step 5 — Understand the generated files
 
-| File or directory | Purpose |
-| --- | --- |
-| `src/app/page.tsx` | The page rendered at `/`. |
-| `src/app/layout.tsx` | Root layout, document structure, and shared page wrapper. |
-| `src/app/globals.css` | Global styles and Tailwind setup. |
-| `public/` | Static assets served by URL. |
-| `package.json` | Dependencies and available commands. |
-| `pnpm-lock.yaml` | Resolved dependency versions. |
-| `tsconfig.json` | TypeScript configuration and import aliases. |
-| `next.config.*` | Next.js configuration. |
-| `eslint.config.*` | Lint rules. |
-| `.gitignore` | Files excluded from Git. |
+| File or directory     | Purpose                                                   |
+| --------------------- | --------------------------------------------------------- |
+| `src/app/page.tsx`    | The page rendered at `/`.                                 |
+| `src/app/layout.tsx`  | Root layout, document structure, and shared page wrapper. |
+| `src/app/globals.css` | Global styles and Tailwind setup.                         |
+| `public/`             | Static assets served by URL.                              |
+| `package.json`        | Dependencies and available commands.                      |
+| `pnpm-lock.yaml`      | Resolved dependency versions.                             |
+| `tsconfig.json`       | TypeScript configuration and import aliases.              |
+| `next.config.*`       | Next.js configuration.                                    |
+| `eslint.config.*`     | Lint rules.                                               |
+| `.gitignore`          | Files excluded from Git.                                  |
 
 Read `page.tsx` and `layout.tsx` together. Find where the layout renders `children`, where metadata is defined, and where global CSS is imported.
 
@@ -188,29 +188,16 @@ Only commit after verifying that the staged changes contain no secrets or uninte
 
 ## Completion checklist
 
-- [ ] Next.js scaffold created using pnpm and the agreed settings.
-- [ ] Default page ran locally before modification.
-- [ ] App Router, root layout, and component execution boundaries reviewed.
-- [ ] Basic DocumentHub page and metadata implemented.
-- [ ] Supabase development project created; region choice recorded.
-- [ ] `.env.local` ignored and `.env.example` committed with placeholders.
-- [ ] Lint, type checking, and production build passed.
-- [ ] Production page checked manually.
-- [ ] README describes the current scope accurately.
-- [ ] Learning notes updated and milestone committed.
-
-## Learning notes — fill in after completing the work
-
-Leave these entries unfinished until the work is verified. This section records actual experience rather than planned achievements.
-
-- Completion date:
-- Node.js / pnpm / Next.js versions:
-- Supabase region and reason:
-- What I can now explain:
-- A decision I made and why:
-- An issue I encountered and how I resolved it:
-- Verification results:
-- Milestone commit:
+- [x] Next.js scaffold created using pnpm and the agreed settings.
+- [x] Default page ran locally before modification.
+- [x] App Router, root layout, and component execution boundaries reviewed.
+- [x] Basic DocumentHub page and metadata implemented.
+- [x] Supabase development project created; region choice recorded.
+- [x] `.env.local` ignored and `.env.example` committed with placeholders.
+- [x] Lint, type checking, and production build passed.
+- [x] Production page checked manually.
+- [x] README describes the current scope accurately.
+- [x] Learning notes updated and milestone committed.
 
 ## Next slice
 
