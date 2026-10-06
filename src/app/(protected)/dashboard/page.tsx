@@ -1,15 +1,9 @@
-import { redirect } from "next/navigation";
-
 import { createClient } from "@/lib/supabase/server";
 
 export default async function DashboardPage() {
   const supabase = await createClient();
 
-  const { data, error } = await supabase.auth.getClaims();
-
-  if (error || !data?.claims) {
-    redirect("/auth/login");
-  }
+  const { data } = await supabase.auth.getClaims();
 
   return (
     <main>
@@ -17,9 +11,9 @@ export default async function DashboardPage() {
 
       <p>You are authenticated.</p>
 
-      <p>User ID: {data.claims.sub}</p>
+      <p>User ID: {data?.claims.sub}</p>
 
-      <p>Email: {data.claims.email}</p>
+      <p>Email: {data?.claims.email}</p>
 
       <form action="/auth/signout" method="post">
         <button type="submit">Logout</button>

@@ -4,12 +4,21 @@ import { redirect } from 'next/navigation'
 
 import { createClient } from '@/lib/supabase/server'
 
-export async function login(formData: FormData) {
+export type LoginState = {
+  error?: string
+}
+
+export const login = async (
+  _previousState: LoginState,
+  formData: FormData
+): Promise<LoginState> => {
   const email = formData.get('email')
   const password = formData.get('password')
 
   if (typeof email !== 'string' || typeof password !== 'string') {
-    throw new Error('Email and password are required')
+    return {
+      error: 'Email and password are required.',
+    }
   }
 
   const supabase = await createClient()
@@ -20,7 +29,9 @@ export async function login(formData: FormData) {
   })
 
   if (error) {
-    throw new Error(error.message)
+    return {
+      error: 'Invalid email or password.',
+    }
   }
 
   redirect('/dashboard')
