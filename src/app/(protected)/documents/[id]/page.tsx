@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import { activateDocument } from "./actions";
 
 type DocumentPageProps = {
   params: Promise<{
@@ -44,6 +45,14 @@ const DocumentPage = async ({ params }: DocumentPageProps) => {
       <div className="rounded-xl border border-gray-200 bg-white p-6">
         <dl className="space-y-5">
           <div className="grid gap-1 sm:grid-cols-[120px_1fr]">
+            <dt className="text-sm font-medium text-gray-500">Status</dt>
+            <dd>
+              <span className="inline-flex rounded-full bg-gray-100 px-2 py-1 text-xs font-medium text-gray-700">
+                {document.status}
+              </span>
+            </dd>
+          </div>
+          <div className="grid gap-1 sm:grid-cols-[120px_1fr]">
             <dt className="text-sm font-medium text-gray-500">Type</dt>
             <dd className="text-sm">{document.mime_type ?? "Unknown"}</dd>
           </div>
@@ -78,6 +87,23 @@ const DocumentPage = async ({ params }: DocumentPageProps) => {
           </div>
         )}
       </div>
+
+      {document.status === "draft" && (
+        <form
+          action={async () => {
+            "use server";
+            await activateDocument(document.id);
+          }}
+          className="mt-8"
+        >
+          <button
+            type="submit"
+            className="inline-flex rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+          >
+            Mark as active
+          </button>
+        </form>
+      )}
     </main>
   );
 };

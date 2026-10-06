@@ -51,12 +51,18 @@ const DocumentsPage = async () => {
                 className="flex items-center justify-between gap-6 rounded-xl border border-gray-200 bg-white p-5"
               >
                 <div className="min-w-0">
-                  <Link
-                    href={`/documents/${document.id}`}
-                    className="font-medium text-blue-600 hover:underline"
-                  >
-                    {document.name}
-                  </Link>
+                  <div className="flex items-center gap-2">
+                    <Link
+                      href={`/documents/${document.id}`}
+                      className="font-medium text-blue-600 hover:underline"
+                    >
+                      {document.name}
+                    </Link>
+
+                    <span className="rounded-full bg-gray-100 px-2 py-1 text-xs font-medium text-gray-700">
+                      {document.status}
+                    </span>
+                  </div>
 
                   <div className="mt-1 flex flex-wrap gap-x-2 text-sm text-gray-500">
                     <span>{document.mime_type ?? "Unknown type"}</span>

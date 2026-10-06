@@ -48,6 +48,7 @@ export type Database = {
           size: number | null
           status: string
           storage_path: string
+          updated_at: string
           user_id: string
         }
         Insert: {
@@ -58,6 +59,7 @@ export type Database = {
           size?: number | null
           status?: string
           storage_path: string
+          updated_at?: string
           user_id: string
         }
         Update: {
@@ -68,6 +70,7 @@ export type Database = {
           size?: number | null
           status?: string
           storage_path?: string
+          updated_at?: string
           user_id?: string
         }
         Relationships: []
