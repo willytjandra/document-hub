@@ -4,111 +4,54 @@ A document management application built with Next.js and Supabase.
 
 I'm building DocumentHub to learn this stack through a practical application: signing in, uploading documents, and managing access to them. My background is in React, backend services, and AWS; this project explores how those skills translate to Next.js and Supabase.
 
-The project is developed in small vertical slices. Each slice adds a focused capability and records the decisions, problems encountered, and verification results.
+The project is developed in small slices. Each slice adds a focused capability and records the decisions, problems encountered, and verification results.
 
 ## Current status
 
-**Slice 2 — Supabase Auth** is complete.
+DocumentHub has completed the first three learning slices:
 
-The application now supports:
+- **Slice 1 — Foundation:** Next.js App Router scaffold, project structure, local setup, and Supabase project preparation.
+- **Slice 2 — Supabase Auth:** sign-up, email confirmation, login, logout, cookie-based sessions, protected routes, Server Actions, and Route Handlers.
+- **Slice 3 — Document Upload with Supabase Storage:** private document uploads, Storage Row Level Security, server-side file validation, document listing, page revalidation, and signed access to private files.
 
-- Email/password sign-up with Supabase Auth.
-- Email confirmation using Supabase's default confirmation flow.
-- Email/password login.
-- Logout.
-- Cookie-based Supabase sessions for Next.js SSR.
-- Protected routes using a route-group layout.
-- User-friendly authentication form states and errors.
-
-The next slice will build on the authenticated application and introduce document upload.
+The application currently supports an authenticated user uploading PDF or image documents to a private Supabase Storage bucket, seeing their own uploaded files, and opening them through short-lived signed URLs.
 
 ## Stack
 
-| Technology              | Role                                                  |
-| ----------------------- | ----------------------------------------------------- |
-| Next.js with App Router | Application UI and server-side logic                  |
-| React and TypeScript    | Components and typed application code                 |
-| Tailwind CSS            | Styling                                               |
-| Supabase                | PostgreSQL database, authentication, and file storage |
-| `@supabase/supabase-js` | Supabase JavaScript client                            |
-| `@supabase/ssr`         | Cookie-based Supabase session handling for SSR        |
-| pnpm                    | Dependency management and project commands            |
-| ESLint                  | Code linting                                          |
+| Technology              | Role                                                                      |
+| ----------------------- | ------------------------------------------------------------------------- |
+| Next.js with App Router | Application UI and server-side logic                                      |
+| React and TypeScript    | Components and typed application code                                     |
+| Tailwind CSS            | Styling                                                                   |
+| Supabase                | PostgreSQL database, authentication, Row Level Security, and file storage |
+| `@supabase/ssr`         | Cookie-aware Supabase clients for browser and server execution            |
+| pnpm                    | Dependency management and project commands                                |
+| ESLint                  | Code linting                                                              |
 
-## Authentication architecture
-
-DocumentHub uses separate Supabase clients for browser and server execution.
+## Implemented architecture
 
 ```text
 Browser
    |
-   | auth cookies
+   | authenticated request / form submission
    v
-Next.js
+Next.js App Router
    |
-   +-- Client Components
-   |      -> browser Supabase client
+   |-- Server Components -> read application data
+   |-- Server Actions ----> application-owned mutations
+   |-- Route Handlers ----> explicit HTTP endpoints
    |
-   +-- Server Components / Actions / Route Handlers
-          -> server Supabase client
-                    |
-                    v
-                 Supabase
+   v
+Supabase
+   |-- Auth
+   |-- Storage
+   |    `-- private documents bucket
+   |         `-- <user-id>/<file>
+   |
+   `-- Row Level Security
 ```
 
-The Next.js proxy keeps Supabase authentication cookies refreshed. Protected application routes live under the `(protected)` route group, whose layout verifies the authenticated user's claims before rendering protected content.
-
-The route group is an organisational boundary only. For example:
-
-```text
-src/app/(protected)/dashboard/page.tsx
-```
-
-is still available at:
-
-```text
-/dashboard
-```
-
-## Authentication flow
-
-### Sign-up
-
-```text
-/auth/sign-up
-    -> Server Action
-    -> supabase.auth.signUp()
-    -> /auth/check-email
-```
-
-Supabase's default email confirmation flow is currently used for this learning project.
-
-### Login
-
-```text
-/auth/login
-    -> Server Action
-    -> supabase.auth.signInWithPassword()
-    -> /dashboard
-```
-
-### Protected routes
-
-```text
-/dashboard
-    -> (protected)/layout.tsx
-    -> supabase.auth.getClaims()
-    -> render or redirect to /auth/login
-```
-
-### Logout
-
-```text
-POST /auth/signout
-    -> Route Handler
-    -> supabase.auth.signOut()
-    -> /auth/login
-```
+The current document-storage boundary is intentionally simple: Supabase Storage is the source for file objects and object metadata. A later slice will introduce application-level document metadata in PostgreSQL.
 
 ## Run locally
 
@@ -134,39 +77,19 @@ NEXT_PUBLIC_SUPABASE_URL=https://your-project-ref.supabase.co
 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=your-publishable-key
 ```
 
-Use the project URL and publishable key from your Supabase project.
+Use the project URL and publishable key from your Supabase project. Keep `.env.local` out of Git. Never put a Supabase secret key or legacy `service_role` key in a `NEXT_PUBLIC_` variable.
 
-Keep `.env.local` out of Git. Never put a Supabase secret key or legacy `service_role` key in a `NEXT_PUBLIC_` variable.
-
-In the Supabase dashboard, set the Authentication Site URL for local development to:
-
-```text
-http://localhost:3000
-```
-
-Start the application:
+Start the development server:
 
 ```bash
 pnpm dev
 ```
 
-Open:
-
-```text
-http://localhost:3000
-```
-
-Useful authentication routes:
-
-```text
-/auth/sign-up
-/auth/login
-/dashboard
-```
+Open [localhost:3000](http://localhost:3000), or the port shown in the terminal.
 
 ## Verification
 
-Run:
+Run the project checks after each slice:
 
 ```bash
 pnpm lint
@@ -174,37 +97,16 @@ pnpm exec tsc --noEmit
 pnpm build
 ```
 
-For Slice 2, also manually verify:
-
-1. A new user can sign up.
-2. The confirmation email is received and the account can be confirmed.
-3. A confirmed user can log in.
-4. An unauthenticated request to `/dashboard` redirects to `/auth/login`.
-5. An authenticated user can access `/dashboard`.
-6. Logout removes the authenticated session.
-7. Invalid login details display a form error instead of an application error.
-
-## Supabase email confirmation note
-
-This project currently uses Supabase's default confirmation-email flow.
-
-For an SSR-oriented production application, a useful alternative is to customise the confirmation email so it links to an application Route Handler such as:
-
-```text
-/auth/confirm?token_hash=...&type=email
-```
-
-The application can then call `supabase.auth.verifyOtp()` server-side and establish the session through cookies before redirecting the user.
-
-The Supabase Free-plan email configuration used during this slice did not allow editing the built-in email template without configuring custom SMTP or moving to an eligible paid setup, so the custom token-hash flow is intentionally deferred.
+Feature-specific manual checks are recorded in each learning guide.
 
 ## Learning history
 
-| Slice                                                   | Focus                                                                                                    | Status   |
-| ------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- | -------- |
-| [01 — Foundation](docs/learning/01-foundation.md)       | Next.js scaffold, application structure, initial page, and Supabase preparation                          | Complete |
-| [02 — Supabase Auth](docs/learning/02-supabase-auth.md) | SSR clients, sessions, sign-up, email confirmation, login, logout, protected routes, and auth form state | Complete |
+| Slice                                                                             | Focus                                                                                        | Status   |
+| --------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | -------- |
+| [01 — Foundation](docs/learning/01-foundation.md)                                 | Next.js scaffold, application structure, initial page, and Supabase preparation              | Complete |
+| [02 — Supabase Auth](docs/learning/02-supabase-auth.md)                           | Authentication lifecycle, SSR sessions, protected routes, Server Actions, and Route Handlers | Complete |
+| [03 — Document Upload with Supabase Storage](docs/learning/03-document-upload.md) | Private Storage, RLS, upload validation, document listing, revalidation, and signed URLs     | Complete |
 
-The next slice will introduce document upload and begin using Supabase Storage.
+The next slice is **Slice 4 — Document List, Details, and Download**. Since Slice 3 already introduced basic listing and signed access, Slice 4 can build on that foundation by introducing application-level document metadata and a richer document detail flow rather than repeating the Storage-only implementation.
 
-Each learning record captures both the implementation and the reasoning behind the architecture.
+Each learning record documents not only what was built, but also the architectural trade-offs and concepts learned along the way.
