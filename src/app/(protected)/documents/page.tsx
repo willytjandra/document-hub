@@ -2,7 +2,15 @@ import { createClient } from "@/lib/supabase/server";
 import { UploadForm } from "./upload-form";
 import Link from "next/link";
 
-const DocumentsPage = async () => {
+type DocumentsPageProps = {
+  searchParams: Promise<{
+    status?: string;
+  }>;
+};
+
+const DocumentsPage = async ({ searchParams }: DocumentsPageProps) => {
+  const { status } = await searchParams;
+
   const supabase = await createClient();
 
   const {
@@ -14,10 +22,16 @@ const DocumentsPage = async () => {
     throw new Error("User is not authenticated.");
   }
 
-  const { data: documents, error: listError } = await supabase
+  let query = supabase
     .from("documents")
     .select("*")
     .order("created_at", { ascending: false });
+
+  if (status === "draft" || status === "active" || status === "archived") {
+    query = query.eq("status", status);
+  }
+
+  const { data: documents, error: listError } = await query;
 
   if (listError) {
     throw new Error(listError.message);
@@ -38,7 +52,35 @@ const DocumentsPage = async () => {
 
       <section>
         <h2 className="mb-4 text-xl font-semibold">Your documents</h2>
+        <div className="mb-6 flex flex-wrap gap-2">
+          <Link
+            href="/documents"
+            className="rounded-lg border border-gray-300 px-3 py-2 text-sm hover:bg-gray-50"
+          >
+            All
+          </Link>
 
+          <Link
+            href="/documents?status=draft"
+            className="rounded-lg border border-gray-300 px-3 py-2 text-sm hover:bg-gray-50"
+          >
+            Draft
+          </Link>
+
+          <Link
+            href="/documents?status=active"
+            className="rounded-lg border border-gray-300 px-3 py-2 text-sm hover:bg-gray-50"
+          >
+            Active
+          </Link>
+
+          <Link
+            href="/documents?status=archived"
+            className="rounded-lg border border-gray-300 px-3 py-2 text-sm hover:bg-gray-50"
+          >
+            Archived
+          </Link>
+        </div>
         {documents.length === 0 ? (
           <div className="rounded-xl border border-dashed border-gray-300 p-8 text-center text-sm text-gray-500">
             No documents uploaded yet.
