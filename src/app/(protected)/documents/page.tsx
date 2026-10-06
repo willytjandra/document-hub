@@ -21,6 +21,21 @@ const DocumentsPage = async () => {
     throw new Error(listError.message);
   }
 
+  const documentsWithUrls = await Promise.all(
+    documents.map(async (document) => {
+      const path = `${user.id}/${document.name}`;
+
+      const { data, error } = await supabase.storage
+        .from("documents")
+        .createSignedUrl(path, 60);
+
+      return {
+        ...document,
+        signedUrl: error ? null : data.signedUrl,
+      };
+    }),
+  );
+
   return (
     <main>
       <h1>Documents</h1>
@@ -31,12 +46,27 @@ const DocumentsPage = async () => {
       <section>
         <h2>Your documents</h2>
 
-        {documents.length === 0 ? (
+        {documentsWithUrls.length === 0 ? (
           <p>No documents uploaded yet.</p>
         ) : (
           <ul>
-            {documents.map((document) => (
-              <li key={document.id ?? document.name}>{document.name}</li>
+            {documentsWithUrls.map((document) => (
+              <li key={document.id ?? document.name}>
+                <span>{document.name}</span>
+
+                {document.signedUrl && (
+                  <>
+                    {" "}
+                    <a
+                      href={document.signedUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Open
+                    </a>
+                  </>
+                )}
+              </li>
             ))}
           </ul>
         )}
