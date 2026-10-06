@@ -1,7 +1,12 @@
 import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { activateDocument, archiveDocument, restoreDocument } from "./actions";
+import {
+  activateDocument,
+  archiveDocument,
+  restoreDocument,
+  deleteDocument,
+} from "./actions";
 
 type DocumentPageProps = {
   params: Promise<{
@@ -122,19 +127,35 @@ const DocumentPage = async ({ params }: DocumentPageProps) => {
         )}
 
         {document.status === "archived" && (
-          <form
-            action={async () => {
-              "use server";
-              await restoreDocument(document.id);
-            }}
-          >
-            <button
-              type="submit"
-              className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium hover:bg-gray-50"
+          <div className="flex gap-3">
+            <form
+              action={async () => {
+                "use server";
+                await restoreDocument(document.id);
+              }}
             >
-              Restore
-            </button>
-          </form>
+              <button
+                type="submit"
+                className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium hover:bg-gray-50"
+              >
+                Restore
+              </button>
+            </form>
+
+            <form
+              action={async () => {
+                "use server";
+                await deleteDocument(document.id, document.storage_path);
+              }}
+            >
+              <button
+                type="submit"
+                className="rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700"
+              >
+                Delete permanently
+              </button>
+            </form>
+          </div>
         )}
       </div>
     </main>
