@@ -1,7 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { activateDocument } from "./actions";
+import { activateDocument, archiveDocument, restoreDocument } from "./actions";
 
 type DocumentPageProps = {
   params: Promise<{
@@ -88,22 +88,55 @@ const DocumentPage = async ({ params }: DocumentPageProps) => {
         )}
       </div>
 
-      {document.status === "draft" && (
-        <form
-          action={async () => {
-            "use server";
-            await activateDocument(document.id);
-          }}
-          className="mt-8"
-        >
-          <button
-            type="submit"
-            className="inline-flex rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+      <div className="mt-8 flex gap-3">
+        {document.status === "draft" && (
+          <form
+            action={async () => {
+              "use server";
+              await activateDocument(document.id);
+            }}
           >
-            Mark as active
-          </button>
-        </form>
-      )}
+            <button
+              type="submit"
+              className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+            >
+              Mark as active
+            </button>
+          </form>
+        )}
+
+        {document.status === "active" && (
+          <form
+            action={async () => {
+              "use server";
+              await archiveDocument(document.id);
+            }}
+          >
+            <button
+              type="submit"
+              className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium hover:bg-gray-50"
+            >
+              Archive
+            </button>
+          </form>
+        )}
+
+        {document.status === "archived" && (
+          <form
+            action={async () => {
+              "use server";
+              await restoreDocument(document.id);
+            }}
+          >
+            <button
+              type="submit"
+              className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium hover:bg-gray-50"
+            >
+              Restore
+            </button>
+          </form>
+        )}
+      </div>
     </main>
   );
 };
