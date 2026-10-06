@@ -72,6 +72,22 @@ export const uploadDocument = async (
       message: uploadError.message,
     };
   }
+  
+  const { error: insertError } = await supabase.from("documents").insert({
+    user_id: user.id,
+    name: file.name,
+    storage_path: filePath,
+    mime_type: file.type,
+    size: file.size,
+  });
+
+  if (insertError) {
+    await supabase.storage.from("documents").remove([filePath]);
+    return {
+      success: false,
+      message: insertError.message,
+    };
+  }
 
   revalidatePath("/documents");
 

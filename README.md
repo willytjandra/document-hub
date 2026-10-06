@@ -8,13 +8,14 @@ The project is developed in small slices. Each slice adds a focused capability a
 
 ## Current status
 
-DocumentHub has completed the first three learning slices:
+DocumentHub has completed the first four learning slices:
 
 - **Slice 1 — Foundation:** Next.js App Router scaffold, project structure, local setup, and Supabase project preparation.
 - **Slice 2 — Supabase Auth:** sign-up, email confirmation, login, logout, cookie-based sessions, protected routes, Server Actions, and Route Handlers.
 - **Slice 3 — Document Upload with Supabase Storage:** private document uploads, Storage Row Level Security, server-side file validation, document listing, page revalidation, and signed access to private files.
+- **Slice 4 — Document Metadata with Supabase Postgres:** application-level document records, database Row Level Security, generated TypeScript database types, database-driven document listing, and dynamic document detail pages.
 
-The application currently supports an authenticated user uploading PDF or image documents to a private Supabase Storage bucket, seeing their own uploaded files, and opening them through short-lived signed URLs.
+The application currently supports authenticated users uploading PDF or image documents to private Supabase Storage, storing document metadata in PostgreSQL, viewing only their own documents, opening document detail pages, and accessing files through short-lived signed URLs.
 
 ## Stack
 
@@ -43,15 +44,39 @@ Next.js App Router
    |
    v
 Supabase
+   |
    |-- Auth
+   |
+   |-- PostgreSQL
+   |    `-- public.documents
+   |         `-- document metadata + ownership
+   |
    |-- Storage
    |    `-- private documents bucket
-   |         `-- <user-id>/<file>
+   |         `-- <user-id>/<uuid>-<filename>
    |
    `-- Row Level Security
+        |-- database document ownership
+        `-- Storage object ownership
 ```
 
-The current document-storage boundary is intentionally simple: Supabase Storage is the source for file objects and object metadata. A later slice will introduce application-level document metadata in PostgreSQL.
+DocumentHub now separates the application record from the physical file:
+
+```text
+PostgreSQL
+  -> document ID
+  -> user ID
+  -> original filename
+  -> Storage path
+  -> MIME type
+  -> size
+  -> created timestamp
+
+Supabase Storage
+  -> actual uploaded file
+```
+
+PostgreSQL is the application source of truth for documents, while Supabase Storage remains responsible for storing the underlying file objects.
 
 ## Run locally
 
@@ -101,12 +126,13 @@ Feature-specific manual checks are recorded in each learning guide.
 
 ## Learning history
 
-| Slice                                                                             | Focus                                                                                        | Status   |
-| --------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | -------- |
-| [01 — Foundation](docs/learning/01-foundation.md)                                 | Next.js scaffold, application structure, initial page, and Supabase preparation              | Complete |
-| [02 — Supabase Auth](docs/learning/02-supabase-auth.md)                           | Authentication lifecycle, SSR sessions, protected routes, Server Actions, and Route Handlers | Complete |
-| [03 — Document Upload with Supabase Storage](docs/learning/03-document-upload.md) | Private Storage, RLS, upload validation, document listing, revalidation, and signed URLs     | Complete |
+| Slice                                                                                  | Focus                                                                                                     | Status   |
+| -------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- | -------- |
+| [01 — Foundation](docs/learning/01-foundation.md)                                      | Next.js scaffold, application structure, initial page, and Supabase preparation                           | Complete |
+| [02 — Supabase Auth](docs/learning/02-supabase-auth.md)                                | Authentication lifecycle, SSR sessions, protected routes, Server Actions, and Route Handlers              | Complete |
+| [03 — Document Upload with Supabase Storage](docs/learning/03-document-upload.md)      | Private Storage, Storage RLS, upload validation, document listing, revalidation, and signed URLs          | Complete |
+| [04 — Document Metadata with Supabase Postgres](docs/learning/04-document-metadata.md) | PostgreSQL document records, database RLS, generated database types, dynamic routes, and document details | Complete |
 
-The next slice is **Slice 4 — Document List, Details, and Download**. Since Slice 3 already introduced basic listing and signed access, Slice 4 can build on that foundation by introducing application-level document metadata and a richer document detail flow rather than repeating the Storage-only implementation.
+The next milestone is deployment. DocumentHub now has enough functionality to deploy an end-to-end working application to Vercel before continuing into more advanced document-management capabilities.
 
 Each learning record documents not only what was built, but also the architectural trade-offs and concepts learned along the way.
