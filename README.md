@@ -8,14 +8,17 @@ The project is developed in small slices. Each slice adds a focused capability a
 
 ## Current status
 
-DocumentHub has completed the first four learning slices:
+DocumentHub has completed five learning slices:
 
 - **Slice 1 — Foundation:** Next.js App Router scaffold, project structure, local setup, and Supabase project preparation.
 - **Slice 2 — Supabase Auth:** sign-up, email confirmation, login, logout, cookie-based sessions, protected routes, Server Actions, and Route Handlers.
-- **Slice 3 — Document Upload with Supabase Storage:** private document uploads, Storage Row Level Security, server-side file validation, document listing, page revalidation, and signed access to private files.
-- **Slice 4 — Document Metadata with Supabase Postgres:** application-level document records, database Row Level Security, generated TypeScript database types, database-driven document listing, and dynamic document detail pages.
+- **Slice 3 — Document Upload with Supabase Storage:** private document uploads, Storage Row Level Security, server-side validation, revalidation, and signed access to private files.
+- **Slice 4 — Document Metadata:** application-level document metadata in PostgreSQL, document list and detail pages, database RLS, and Storage-backed signed document access.
+- **Slice 5 — Document Lifecycle:** document status, activate/archive/restore flows, status filtering, permanent deletion, database migrations, generated database types, and operational migration documentation.
 
-The application currently supports authenticated users uploading PDF or image documents to private Supabase Storage, storing document metadata in PostgreSQL, viewing only their own documents, opening document detail pages, and accessing files through short-lived signed URLs.
+The application now supports an authenticated user uploading PDF or image documents to private Supabase Storage, storing application metadata in PostgreSQL, viewing document details, managing a document lifecycle, filtering documents by status, and securely deleting archived documents.
+
+Database schema changes are now managed through version-controlled Supabase migrations and documented in [`RUNBOOK.md`](RUNBOOK.md).
 
 ## Stack
 
@@ -126,13 +129,16 @@ Feature-specific manual checks are recorded in each learning guide.
 
 ## Learning history
 
-| Slice                                                                                  | Focus                                                                                                     | Status   |
-| -------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- | -------- |
-| [01 — Foundation](docs/learning/01-foundation.md)                                      | Next.js scaffold, application structure, initial page, and Supabase preparation                           | Complete |
-| [02 — Supabase Auth](docs/learning/02-supabase-auth.md)                                | Authentication lifecycle, SSR sessions, protected routes, Server Actions, and Route Handlers              | Complete |
-| [03 — Document Upload with Supabase Storage](docs/learning/03-document-upload.md)      | Private Storage, Storage RLS, upload validation, document listing, revalidation, and signed URLs          | Complete |
-| [04 — Document Metadata with Supabase Postgres](docs/learning/04-document-metadata.md) | PostgreSQL document records, database RLS, generated database types, dynamic routes, and document details | Complete |
+| Slice                                                                             | Focus                                                                                        | Status   |
+| --------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | -------- |
+| [01 — Foundation](docs/learning/01-foundation.md)                                 | Next.js scaffold, application structure, initial page, and Supabase preparation              | Complete |
+| [02 — Supabase Auth](docs/learning/02-supabase-auth.md)                           | Authentication lifecycle, SSR sessions, protected routes, Server Actions, and Route Handlers | Complete |
+| [03 — Document Upload with Supabase Storage](docs/learning/03-document-upload.md) | Private Storage, RLS, upload validation, revalidation, and signed URLs                       | Complete |
+| [04 — Document Metadata](docs/learning/04-document-metadata.md)                   | PostgreSQL document metadata, RLS, document list/detail pages, and signed document access    | Complete |
+| [05 — Document Lifecycle](docs/learning/05-document-lifecycle.md)                 | Lifecycle state, mutations, filtering, deletion, migrations, and database operations         | Complete |
 
-The next milestone is deployment. DocumentHub now has enough functionality to deploy an end-to-end working application to Vercel before continuing into more advanced document-management capabilities.
+The next milestone is **Vercel Deployment — Staging → Production**.
+
+The objective is to deploy the complete DocumentHub built through Slices 1–5, introduce environment promotion and deployment gates, and extend the database runbook for staging and production operations.
 
 Each learning record documents not only what was built, but also the architectural trade-offs and concepts learned along the way.
