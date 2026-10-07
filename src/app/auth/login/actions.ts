@@ -34,5 +34,5 @@ export const login = async (
     }
   }
 
-  redirect('/dashboard')
+  redirect('/documents')
 }
