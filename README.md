@@ -5,7 +5,7 @@ and securely accessing personal documents.
 
 **Try the live application:** [document-hub-two.vercel.app](https://document-hub-two.vercel.app/)
 
-It is built as a portfolio project, but the deployed application is ready to use.
+The deployed application demonstrates the complete document workflow, from authentication and private upload through lifecycle management and secure file access.
 
 ## What you can do
 
@@ -50,16 +50,16 @@ No installation is required to try the deployed application.
 
 ## Tech stack
 
-| Technology | Purpose |
-| --- | --- |
+| Technology              | Purpose                                                                           |
+| ----------------------- | --------------------------------------------------------------------------------- |
 | Next.js with App Router | Application pages, layouts, Server Components, Server Actions, and Route Handlers |
-| React and TypeScript | UI and type-safe application code |
-| Tailwind CSS | Responsive styling |
-| Supabase Auth | Email/password authentication and sessions |
-| Supabase PostgreSQL | Document metadata and lifecycle state |
-| Supabase Storage | Private file storage |
-| Row Level Security | Database and file ownership enforcement |
-| Vercel | Production hosting and deployment |
+| React and TypeScript    | UI and type-safe application code                                                 |
+| Tailwind CSS            | Responsive styling                                                                |
+| Supabase Auth           | Email/password authentication and sessions                                        |
+| Supabase PostgreSQL     | Document metadata and lifecycle state                                             |
+| Supabase Storage        | Private file storage                                                              |
+| Row Level Security      | Database and file ownership enforcement                                           |
+| Vercel                  | Production hosting and deployment                                                 |
 
 ## For developers
 
