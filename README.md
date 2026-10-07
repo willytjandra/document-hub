@@ -20,6 +20,22 @@ It is built as a portfolio project, but the deployed application is ready to use
 DocumentHub uses database and Storage-level ownership rules so users can only access
 their own documents.
 
+## See it in action
+
+The current interface is intentionally focused on the core document workflow:
+
+![DocumentHub public landing page](docs/screenshots/landing-page.png)
+
+_Public landing page with clear paths to sign in or create an account._
+
+![DocumentHub documents workspace](docs/screenshots/documents-workspace.png)
+
+_Authenticated workspace for uploading, filtering, and viewing documents._
+
+![DocumentHub document details](docs/screenshots/document-details.png)
+
+_Document details with secure file access and lifecycle actions._
+
 ## Getting started
 
 ### Use the live application
