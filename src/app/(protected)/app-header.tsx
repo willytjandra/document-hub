@@ -15,8 +15,12 @@ export const AppHeader = ({ email }: AppHeaderProps) => {
           DocumentHub
         </Link>
 
-        <div className="flex items-center gap-4 text-sm">
-          {email && <span className="max-w-48 truncate text-slate-600">{email}</span>}
+        <div className="flex min-w-0 items-center gap-3 text-sm">
+          {email && (
+            <span className="max-w-[45vw] truncate text-slate-600 sm:max-w-48">
+              {email}
+            </span>
+          )}
 
           <form action="/auth/signout" method="post">
             <button
