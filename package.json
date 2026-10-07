@@ -5,10 +5,11 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "typegen": "next typegen",
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "build:prod": "pnpm lint && pnpm typecheck && pnpm build"
+    "build:prod": "pnpm lint && pnpm typegen && pnpm typecheck && pnpm build"
   },
   "author": "Willy Tjandra <willy.tjandra@gmail.com>",
   "dependencies": {
