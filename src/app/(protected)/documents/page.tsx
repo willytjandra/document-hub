@@ -68,6 +68,7 @@ const DocumentsPage = async ({ searchParams }: DocumentsPageProps) => {
 
       <section
         aria-labelledby="upload-heading"
+        id="upload-document"
         className="mb-10 rounded-xl border border-slate-200 bg-white p-6 shadow-sm"
       >
         <div className="mb-5">
@@ -115,8 +116,38 @@ const DocumentsPage = async ({ searchParams }: DocumentsPageProps) => {
         </div>
 
         {documents.length === 0 ? (
-          <div className="rounded-xl border border-dashed border-slate-300 bg-white p-8 text-center text-sm text-slate-500">
-            No documents uploaded yet.
+          <div className="rounded-xl border border-dashed border-slate-300 bg-white p-8 text-center">
+            {activeStatus === "all" ? (
+              <>
+                <h3 className="text-base font-semibold text-slate-900">
+                  No documents yet
+                </h3>
+                <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-slate-600">
+                  Upload your first document to start building your library.
+                </p>
+                <a
+                  href="#upload-document"
+                  className="mt-4 inline-flex rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
+                >
+                  Upload a document
+                </a>
+              </>
+            ) : (
+              <>
+                <h3 className="text-base font-semibold text-slate-900">
+                  No {activeStatus} documents
+                </h3>
+                <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-slate-600">
+                  No documents match the {activeStatus} filter.
+                </p>
+                <Link
+                  href="/documents"
+                  className="mt-4 inline-flex rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                >
+                  View all documents
+                </Link>
+              </>
+            )}
           </div>
         ) : (
           <ul className="space-y-3">
